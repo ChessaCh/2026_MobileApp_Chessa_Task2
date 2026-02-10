@@ -64,6 +64,8 @@ flutter:
     - assets/images/bgblibli.png
     - assets/images/googlelogo.png
     - assets/images/blibli_tiket_logo.svg
+    - assets/images/profile_pic.png
+    - assets/images/akun_top_bg.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
