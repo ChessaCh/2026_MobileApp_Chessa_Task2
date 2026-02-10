@@ -48,31 +48,23 @@ class AkunPage extends StatelessWidget {
                   ),
                 ),
                 
-                // Scrollable content
-                Expanded(
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        const SizedBox(height: 40),
-                        
-                        // Profile Card with notch
-                        _buildProfileCard(screenWidth),
-                        
-                        const SizedBox(height: 24),
-                        
-                        // Menu Items
-                        _buildMenuSection(),
-                        
-                        const SizedBox(height: 180),
-                        
-                        // Footer
-                        _buildFooter(),
-                        
-                        const SizedBox(height: 24),
-                      ],
-                    ),
-                  ),
-                ),
+                // Content (non-scrollable)
+                const SizedBox(height: 20),
+                
+                // Profile Card with notch
+                _buildProfileCard(screenWidth),
+                
+                const SizedBox(height: 16),
+                
+                // Menu Items
+                _buildMenuSection(),
+                
+                const Spacer(),
+                
+                // Footer
+                _buildFooter(),
+                
+                const SizedBox(height: 16),
               ],
             ),
           ),
@@ -83,102 +75,95 @@ class AkunPage extends StatelessWidget {
 
   Widget _buildProfileCard(double screenWidth) {
     const avatarSize = 110.0;
-    const notchOverlap = 30.0; // Reduced overlap for better embedding
+    const notchOverlap = 30.0;
     
     return Stack(
       clipBehavior: Clip.none,
       children: [
-        // Background rectangular white container (full width, no padding)
+        // Main rectangular container (no shadow, positioned behind)
         Container(
-          margin: const EdgeInsets.only(top: notchOverlap + 50),
+          margin: const EdgeInsets.only(top: notchOverlap + 60),
           width: double.infinity,
           height: 180,
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(0),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.03),
-                blurRadius: 8,
-                offset: const Offset(0, 2),
-              ),
-            ],
           ),
         ),
         
-        // Notched container with shadow
+        // Notched container with custom shadow
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Stack(
             clipBehavior: Clip.none,
             children: [
-              // White card with notch
+              // Custom shadow layer
               Container(
                 margin: const EdgeInsets.only(top: notchOverlap),
-                child: ClipPath(
-                  clipper: NotchClipper(
+                child: CustomPaint(
+                  painter: NotchShadowPainter(
                     notchRadius: avatarSize / 2,
-                    notchMargin: 8,
+                    shadowColor: Colors.black.withOpacity(0.4),
+                    shadowBlur: 20,
+                    shadowOffset: const Offset(0, 4),
                   ),
-                  child: Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.only(
-                      top: 90,
-                      bottom: 32,
-                      left: 24,
-                      right: 24,
+                  child: ClipPath(
+                    clipper: NotchClipper(
+                      notchRadius: avatarSize / 2,
+                      notchMargin: 8,
                     ),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(24),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.15),
-                          blurRadius: 24,
-                          offset: const Offset(0, 8),
-                          spreadRadius: 4,
-                        ),
-                      ],
-                    ),
-                child: Column(
-                  children: [
-                    const Text(
-                      'Masuk',
-                      style: TextStyle(
-                        fontSize: 26,
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xFF007CFF),
+                    child: Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.only(
+                        top: 90,
+                        bottom: 48,
+                        left: 24,
+                        right: 24,
                       ),
-                    ),
-                    const SizedBox(height: 10),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          'Tidak punya akun? ',
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Colors.grey[600],
-                          ),
-                        ),
-                        GestureDetector(
-                          onTap: () {},
-                          child: const Text(
-                            'Daftar',
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(24),
+                      ),
+                      child: Column(
+                        children: [
+                          const Text(
+                            'Masuk',
                             style: TextStyle(
-                              fontSize: 14,
+                              fontSize: 26,
+                              fontWeight: FontWeight.bold,
                               color: Color(0xFF007CFF),
-                              fontWeight: FontWeight.w600,
                             ),
                           ),
-                        ),
-                      ],
+                          const SizedBox(height: 10),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                'Tidak punya akun? ',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.grey[600],
+                                ),
+                              ),
+                              GestureDetector(
+                                onTap: () {},
+                                child: const Text(
+                                  'Daftar',
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: Color(0xFF007CFF),
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
-                  ],
+                  ),
                 ),
               ),
-            ),
-          ),
           // Floating Avatar
           Positioned(
             top: 0,
@@ -217,39 +202,36 @@ class AkunPage extends StatelessWidget {
 }
 
   Widget _buildMenuSection() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(16),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.04),
-              blurRadius: 8,
-              offset: const Offset(0, 2),
-            ),
-          ],
-        ),
-        child: Column(
-          children: [
-            _buildMenuItem(
-              icon: Icons.help_outline,
-              title: 'Bantuan BlibliCare',
-              onTap: () {},
-            ),
-            Divider(
-              height: 1,
-              thickness: 1,
-              color: Colors.grey[100],
-            ),
-            _buildMenuItem(
-              icon: Icons.store_outlined,
-              title: 'Jual di Blibli',
-              onTap: () {},
-            ),
-          ],
-        ),
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(0),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.04),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Column(
+        children: [
+          _buildMenuItem(
+            icon: Icons.help_outline,
+            title: 'Bantuan BlibliCare',
+            onTap: () {},
+          ),
+          Divider(
+            height: 1,
+            thickness: 1,
+            color: Colors.grey[100],
+          ),
+          _buildMenuItem(
+            icon: Icons.store_outlined,
+            title: 'Jual di Blibli',
+            onTap: () {},
+          ),
+        ],
       ),
     );
   }
@@ -266,18 +248,10 @@ class AkunPage extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
         child: Row(
           children: [
-            Container(
-              width: 48,
-              height: 48,
-              decoration: BoxDecoration(
-                color: Colors.grey[300],
-                shape: BoxShape.circle,
-              ),
-              child: Icon(
-                icon,
-                color: Colors.grey[600],
-                size: 26,
-              ),
+            Icon(
+              icon,
+              color: Colors.grey[600],
+              size: 26,
             ),
             const SizedBox(width: 16),
             Expanded(
@@ -303,10 +277,9 @@ class AkunPage extends StatelessWidget {
 
   Widget _buildFooter() {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
+      padding: const EdgeInsets.symmetric(horizontal: 70),
       child: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
+        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(16),
@@ -325,25 +298,32 @@ class AkunPage extends StatelessWidget {
               children: [
                 Icon(
                   Icons.shopping_bag_outlined,
-                  size: 22,
+                  size: 20,
                   color: Colors.grey[600],
                 ),
                 const SizedBox(width: 8),
                 Text(
                   'Tentang Blibli',
                   style: TextStyle(
-                    fontSize: 15,
+                    fontSize: 14,
                     color: Colors.grey[700],
                     fontWeight: FontWeight.w500,
                   ),
                 ),
               ],
             ),
-            const SizedBox(height: 16),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 12),
+              child: Divider(
+                height: 1,
+                thickness: 1,
+                color: Colors.grey[300],
+              ),
+            ),
             Text(
               'All Rights Reserved',
               style: TextStyle(
-                fontSize: 12,
+                fontSize: 11,
                 color: Colors.grey[500],
               ),
             ),
@@ -424,5 +404,69 @@ class NotchClipper extends CustomClipper<Path> {
   bool shouldReclip(NotchClipper oldClipper) {
     return oldClipper.notchRadius != notchRadius ||
         oldClipper.notchMargin != notchMargin;
+  }
+}
+
+// Custom painter to create shadow following the notch shape
+class NotchShadowPainter extends CustomPainter {
+  final double notchRadius;
+  final Color shadowColor;
+  final double shadowBlur;
+  final Offset shadowOffset;
+
+  NotchShadowPainter({
+    required this.notchRadius,
+    required this.shadowColor,
+    required this.shadowBlur,
+    required this.shadowOffset,
+  });
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final path = Path();
+    final centerX = size.width / 2;
+    
+    // Notch dimensions (same as NotchClipper)
+    final notchWidth = notchRadius * 1.1;
+    final notchDepth = notchRadius * 0.5;
+    
+    final notchLeft = centerX - notchWidth;
+    final notchRight = centerX + notchWidth;
+    
+    // Create the same path as NotchClipper
+    path.moveTo(0, 24);
+    path.quadraticBezierTo(0, 0, 24, 0);
+    path.lineTo(notchLeft, 0);
+    path.lineTo(notchLeft + 4, notchDepth * 0.2);
+    path.quadraticBezierTo(
+      centerX,
+      notchDepth,
+      notchRight - 4,
+      notchDepth * 0.2,
+    );
+    path.lineTo(notchRight, 0);
+    path.lineTo(size.width - 24, 0);
+    path.quadraticBezierTo(size.width, 0, size.width, 24);
+    path.lineTo(size.width, size.height - 24);
+    path.quadraticBezierTo(
+      size.width,
+      size.height,
+      size.width - 24,
+      size.height,
+    );
+    path.lineTo(24, size.height);
+    path.quadraticBezierTo(0, size.height, 0, size.height - 24);
+    path.close();
+    
+    // Draw shadow
+    canvas.drawShadow(path, shadowColor, shadowBlur, true);
+  }
+
+  @override
+  bool shouldRepaint(NotchShadowPainter oldDelegate) {
+    return oldDelegate.notchRadius != notchRadius ||
+        oldDelegate.shadowColor != shadowColor ||
+        oldDelegate.shadowBlur != shadowBlur ||
+        oldDelegate.shadowOffset != shadowOffset;
   }
 }
